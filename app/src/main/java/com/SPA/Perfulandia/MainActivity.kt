@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import androidx.navigation.navArgument
 import com.SPA.Perfulandia.data.database.DatabaseProvider
 import com.SPA.Perfulandia.repository.ProductoRepository
 import com.SPA.Perfulandia.ui.screens.*
@@ -56,13 +58,35 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // Aquí puedes agregar más rutas cuando las necesites
-                    // composable(NavRoutes.DETAIL) {
-                    //     DetailScreen(navController)
-                    // }
-                    // composable(NavRoutes.PROFILE) {
-                    //     ProfileScreen(navController)
-                    // }
+                    // Ruta de detalle con parámetro ID
+                    composable(
+                        route = "detail/{id}",
+                        arguments = listOf(navArgument("id") {
+                            type = NavType.IntType
+                        })
+                    ) { backStackEntry ->
+                        val id = backStackEntry.arguments?.getInt("id")
+                        DetailScreen(
+                            navController = navController,
+                            viewModel = homeViewModel,
+                            productoId = id
+                        )
+                    }
+
+                    // Ruta de edición con parámetro ID
+                    composable(
+                        route = "edit_product/{id}",
+                        arguments = listOf(navArgument("id") {
+                            type = NavType.IntType
+                        })
+                    ) { backStackEntry ->
+                        val id = backStackEntry.arguments?.getInt("id")
+                        EditProductScreen(
+                            navController = navController,
+                            homeViewModel = homeViewModel,
+                            productoId = id
+                        )
+                    }
                 }
             }
         }

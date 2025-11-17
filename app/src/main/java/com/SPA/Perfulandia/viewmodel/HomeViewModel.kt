@@ -35,4 +35,14 @@ class HomeViewModel(
             repository.eliminar(producto)
         }
     }
+
+    fun actualizarProducto(producto: Producto) {
+        viewModelScope.launch {
+            repository.actualizar(producto)
+        }
+    }
+
+    suspend fun obtenerProductoPorId(id: Int): Producto? {
+        return repository.obtenerPorId(id)
+    }
 }

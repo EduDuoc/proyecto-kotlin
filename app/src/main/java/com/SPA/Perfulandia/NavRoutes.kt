@@ -12,4 +12,9 @@ object NavRoutes {
     const val FORM_GRAPH = "form_graph"
 
     const val ADD_PRODUCT = "add_product"
+    const val EDIT_PRODUCT = "edit_product"
+
+    // Rutas con parámetros
+    fun detailWithId(id: Int) = "detail/$id"
+    fun editWithId(id: Int) = "edit_product/$id"
 }

@@ -12,6 +12,9 @@ interface ProductoDao {
     @Delete
     suspend fun delete(producto: Producto)
 
+    @Update
+    suspend fun update(producto: Producto)
+
     @Query("SELECT * FROM producto")
     fun getAll(): Flow<List<Producto>>
 

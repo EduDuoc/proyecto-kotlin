@@ -17,6 +17,10 @@ class ProductoRepository(
         dao.delete(producto)
     }
 
+    suspend fun actualizar(producto: Producto) {
+        dao.update(producto)
+    }
+
     suspend fun obtenerPorId(id: Int): Producto? {
         return dao.getById(id)
     }
