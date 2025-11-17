@@ -4,15 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.SPA.Perfulandia.ui.screens.DetailScreen
-import com.SPA.Perfulandia.ui.screens.HomeScreen
-import com.SPA.Perfulandia.ui.screens.ProfileScreen
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.*
+import com.SPA.Perfulandia.data.database.DatabaseProvider
+import com.SPA.Perfulandia.repository.ProductoRepository
+import com.SPA.Perfulandia.ui.screens.*
 import com.SPA.Perfulandia.ui.theme.PerfulandiaSPATheme
+import com.SPA.Perfulandia.viewmodel.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,33 +20,49 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PerfulandiaSPATheme {
+
                 val navController = rememberNavController()
+
+                // Construcción del ViewModel con FACTORY (la misma instancia para todas las pantallas)
+                val context = LocalContext.current
+                val db = remember { DatabaseProvider.getDatabase(context) }
+                val repository = remember { ProductoRepository(db.productoDao()) }
+
+                val homeViewModel: HomeViewModel = viewModel(
+                    factory = HomeViewModelFactory(repository)
+                )
 
                 NavHost(
                     navController = navController,
                     startDestination = NavRoutes.HOME
                 ) {
+
                     composable(NavRoutes.HOME) {
                         HomeScreen(
-                            onGoToDetail = { id -> navController.navigate(NavRoutes.detailWithId(id)) },
-                            onGoToProfile = { navController.navigate(NavRoutes.PROFILE) }
+                            navController = navController,
+                            viewModel = homeViewModel,
+                            onNavigateAdd = {
+                                navController.navigate(NavRoutes.ADD_PRODUCT)
+                            }
                         )
                     }
-                    composable(
-                        route = NavRoutes.DETAIL_WITH_ARG,
-                        arguments = listOf(navArgument("id") { type = NavType.IntType })
-                    ) { backStackEntry ->
-                        val id = backStackEntry.arguments?.getInt("id") ?: 1
-                        DetailScreen(
-                            id = id,
-                            onBackToHome = { navController.popBackStack(NavRoutes.HOME, inclusive = false) }
+
+                    composable(NavRoutes.ADD_PRODUCT) {
+                        AddProductScreen(
+                            homeViewModel = homeViewModel,
+                            onBack = {
+                                navController.popBackStack()
+                            }
                         )
                     }
-                    composable(NavRoutes.PROFILE) {
-                        ProfileScreen(
-                            onBackToHome = { navController.popBackStack(NavRoutes.HOME, inclusive = false) }
-                        )
-                    }
+
+                    // Aquí puedes agregar más rutas cuando las necesites
+                    // composable(NavRoutes.DETAIL) {
+                    //     DetailScreen(navController)
+                    // }
+                    // composable(NavRoutes.PROFILE) {
+                    //     ProfileScreen(navController)
+                    // }
                 }
             }
         }

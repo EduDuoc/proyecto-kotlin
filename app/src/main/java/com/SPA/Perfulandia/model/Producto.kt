@@ -1,9 +1,14 @@
 package com.SPA.Perfulandia.model
 
-data class Producto(
-    val id: Int,
-    val nombre: String,
-    val precio: Double,
-    val imagen: String
-)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+
+@Entity(tableName = "producto")
+data class Producto(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val nombre: String,
+    val precio: Int,
+    val descripcion: String
+)

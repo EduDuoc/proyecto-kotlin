@@ -11,11 +11,9 @@ import com.SPA.Perfulandia.R
 fun Logo(modifier: Modifier = Modifier) {
     // compnente Logo
     Image(
-        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+        painter = painterResource(id = R.drawable.image),
         contentDescription = "Imagen de ejemplo",
         modifier = modifier,
-        contentScale = ContentScale.Crop
+        contentScale = ContentScale.Inside // Crop
     )
 }
-
-
