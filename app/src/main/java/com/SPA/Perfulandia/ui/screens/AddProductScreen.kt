@@ -24,17 +24,13 @@ fun AddProductScreen(
     homeViewModel: HomeViewModel,
     onBack: () -> Unit
 ) {
-    // Variables de estado para los campos del formulario
-    // rememberSaveable preserva los valores si la pantalla se recompone
     var nombre by rememberSaveable { mutableStateOf("") }
     var precioText by rememberSaveable { mutableStateOf("") }
     var descripcion by rememberSaveable { mutableStateOf("") }
     var imagenUri by rememberSaveable { mutableStateOf<String?>(null) }
 
-    // Flag para mostrar/ocultar mensajes de error
     var showError by rememberSaveable { mutableStateOf(false) }
 
-    // Estado para mostrar SnackBar con mensaje de error específico
     var mensajeError by rememberSaveable { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -106,7 +102,6 @@ fun AddProductScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Componente de captura de imagen
                 ImageCapture(
                     onImageCaptured = { uri ->
                         imagenUri = uri
@@ -118,10 +113,8 @@ fun AddProductScreen(
 
                 Button(
                     onClick = {
-                        // Convertir el texto del precio a entero
                         val precio = precioText.toIntOrNull()
 
-                        // VALIDACIÓN CON MENSAJES ESPECÍFICOS
                         when {
                             nombre.isBlank() -> {
                                 mensajeError = "⚠️ El nombre es obligatorio"

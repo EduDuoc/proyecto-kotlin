@@ -37,7 +37,6 @@ fun EditProductScreen(
     val scope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(true) }
 
-    // Cargar el producto cuando se abre la pantalla
     LaunchedEffect(productoId) {
         scope.launch {
             productoId?.let {
@@ -99,7 +98,6 @@ fun EditProductScreen(
                     modifier = Modifier
                         .padding(16.dp)
                 ) {
-                    // CAMPO: NOMBRE DEL PRODUCTO
                     OutlinedTextField(
                         value = nombre,
                         onValueChange = { nombre = it },
@@ -107,7 +105,6 @@ fun EditProductScreen(
                         modifier = Modifier.fillMaxWidth(),
                         isError = nombre.isNotBlank() && nombre.length < 3
                     )
-                    // Mensaje de validación en tiempo real
                     Text(
                         text = when {
                             nombre.isEmpty() -> "✓ Campo vacío (mínimo 3 caracteres)"
@@ -125,7 +122,6 @@ fun EditProductScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // CAMPO: PRECIO
                     OutlinedTextField(
                         value = precioText,
                         onValueChange = {
@@ -137,7 +133,6 @@ fun EditProductScreen(
                         modifier = Modifier.fillMaxWidth(),
                         isError = showError
                     )
-                    // Mensaje de validación en tiempo real
                     Text(
                         text = when {
                             precioText.isEmpty() -> "✓ Campo vacío (rango: 1000-999999)"
@@ -158,7 +153,6 @@ fun EditProductScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // CAMPO: DESCRIPCIÓN (Opcional)
                     OutlinedTextField(
                         value = descripcion,
                         onValueChange = { descripcion = it },
@@ -168,7 +162,6 @@ fun EditProductScreen(
                             .heightIn(min = 80.dp),
                         maxLines = 4
                     )
-                    // Mensaje informativo
                     Text(
                         text = "Campo opcional - Máximo 500 caracteres (${descripcion.length}/500)",
                         style = MaterialTheme.typography.bodySmall,
@@ -178,7 +171,6 @@ fun EditProductScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Componente de captura de imagen
                     ImageCapture(
                         onImageCaptured = { uri ->
                             imagenUri = uri

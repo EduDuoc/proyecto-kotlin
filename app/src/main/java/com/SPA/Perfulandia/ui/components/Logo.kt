@@ -9,7 +9,7 @@ import com.SPA.Perfulandia.R
 
 @Composable
 fun Logo(modifier: Modifier = Modifier) {
-    // compnente Logo
+
     Image(
         painter = painterResource(id = R.drawable.image),
         contentDescription = "Imagen de ejemplo",

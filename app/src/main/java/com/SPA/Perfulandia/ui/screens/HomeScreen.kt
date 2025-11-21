@@ -28,19 +28,13 @@ fun HomeScreen(
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    // Observar la lista de productos desde el ViewModel
     val productos by viewModel.productos.collectAsState()
 
-    // Estado para el texto de búsqueda
     var searchText by remember { mutableStateOf("") }
 
-    // FocusRequester para activar el TextField de búsqueda desde el botón de la barra inferior
     val searchFocusRequester = remember { FocusRequester() }
 
-    // FILTRADO REACTIVO: Filtra los productos en tiempo real según el texto de búsqueda
-    // Se ejecuta cada vez que cambian "productos" o "searchText"
     val productosFiltrados = productos.filter { producto ->
-        // Búsqueda case-insensitive (ignora mayúsculas/minúsculas)
         producto.nombre.contains(searchText, ignoreCase = true)
     }
 
@@ -53,7 +47,6 @@ fun HomeScreen(
                 onAgregarClick = onNavigateAdd,
                 onHomeClick = { /* Ya estamos en home, no hace nada */ },
                 onSearchClick = {
-                    // Cuando se hace clic en el botón de búsqueda, hace foco en el TextField
                     searchFocusRequester.requestFocus()
                 }
             )
@@ -65,14 +58,12 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            // Logo
             Logo(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(if (isLandscape) 100.dp else 140.dp)
             )
 
-            // Buscador
             TextField(
                 value = searchText,
                 onValueChange = { searchText = it },

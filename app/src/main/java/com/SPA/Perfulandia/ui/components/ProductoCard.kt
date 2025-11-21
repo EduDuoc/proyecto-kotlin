@@ -32,7 +32,6 @@ fun ProductoCard(
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-            // Mostrar la imagen del producto si existe
             producto.imagen?.let { imagenUri ->
                 if (imagenUri.isNotEmpty() && imagenUri != "null") {
                     Card(
@@ -51,7 +50,6 @@ fun ProductoCard(
                 }
             }
 
-            // Información del producto
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -73,18 +71,16 @@ fun ProductoCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Botones de acción
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Botón de información - Azul media noche oscuro
                 IconButton(
                     onClick = onInfo,
                     modifier = Modifier.size(32.dp),
                     colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = Color(0xFF0D1B3D)  // Azul media noche muy oscuro
+                        contentColor = Color(0xFF0D1B3D)
                     )
                 ) {
                     Icon(
@@ -94,7 +90,6 @@ fun ProductoCard(
                     )
                 }
 
-                // Botón de editar
                 IconButton(
                     onClick = onEdit,
                     modifier = Modifier.size(32.dp),
@@ -109,7 +104,6 @@ fun ProductoCard(
                     )
                 }
 
-                // Botón de eliminar
                 IconButton(
                     onClick = { showDeleteDialog = true },
                     modifier = Modifier.size(32.dp),
@@ -127,7 +121,6 @@ fun ProductoCard(
         }
     }
 
-    // Diálogo de confirmación para eliminar
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },

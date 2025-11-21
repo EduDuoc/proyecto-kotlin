@@ -26,23 +26,17 @@ fun ImageCapture(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    // Estado para guardar el URI de la imagen seleccionada de galería
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    // Estado para guardar el Bitmap capturado con la cámara
     var capturedPhotoBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
-    // Launcher para capturar foto con la cámara del dispositivo
-    // TakePicturePreview devuelve un Bitmap directamente
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
         try {
             if (bitmap != null) {
                 capturedPhotoBitmap = bitmap
-                // Guardar el bitmap como archivo JPEG y obtener su URI
                 val savedUri = saveBitmapToFile(context, bitmap)
                 Log.d("ImageCapture", "Foto guardada: $savedUri")
-                // Notificar al componente padre con la URI del archivo guardado
                 onImageCaptured(savedUri)
             }
         } catch (e: Exception) {
@@ -50,7 +44,6 @@ fun ImageCapture(
         }
     }
 
-    // Launcher para seleccionar imagen de la galería
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
@@ -77,7 +70,6 @@ fun ImageCapture(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Previa de imagen capturada
         if (capturedPhotoBitmap != null) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Image(
@@ -150,26 +142,20 @@ fun ImageCapture(
     }
 }
 
-// Función privada que guarda un Bitmap como archivo JPEG en el almacenamiento del dispositivo
 private fun saveBitmapToFile(context: Context, bitmap: Bitmap): String {
     return try {
-        // Crear directorio "product_images" en el almacenamiento privado de la app
         val dir = File(context.filesDir, "product_images")
         if (!dir.exists()) dir.mkdirs()
 
-        // Crear archivo con nombre único usando timestamp: IMG_1234567890.jpg
         val file = File(dir, "IMG_${System.currentTimeMillis()}.jpg")
 
-        // Guardar el bitmap como JPEG comprimido al 85% de calidad
         FileOutputStream(file).use {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 85, it)
         }
-
-        // Retornar la URI del archivo guardado en formato file://
         file.toURI().toString()
     } catch (e: Exception) {
         Log.e("ImageCapture", "Error guardar:", e)
-        "" // Retornar string vacío si hay error
+        ""
     }
 }
 

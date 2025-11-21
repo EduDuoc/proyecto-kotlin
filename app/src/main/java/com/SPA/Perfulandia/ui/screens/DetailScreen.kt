@@ -28,7 +28,6 @@ fun DetailScreen(
     var isLoading by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
 
-    // Cargar el producto cuando se abre la pantalla
     LaunchedEffect(productoId) {
         scope.launch {
             productoId?.let {
@@ -75,7 +74,6 @@ fun DetailScreen(
                     CircularProgressIndicator()
                 }
             } else if (producto != null) {
-                // Mostrar la imagen del producto si existe
                 producto!!.imagen?.let { imagenUri ->
                     if (imagenUri.isNotEmpty() && imagenUri != "null") {
                         Card(

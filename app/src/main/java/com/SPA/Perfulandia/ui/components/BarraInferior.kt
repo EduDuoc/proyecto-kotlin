@@ -30,7 +30,6 @@ fun BarraInferior(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Botón Home - Volver a HomeScreen
             IconButton(
                 onClick = onHomeClick,
                 modifier = Modifier.size(50.dp)
@@ -42,7 +41,6 @@ fun BarraInferior(
                 )
             }
 
-            // Botón Agregar Producto
             IconButton(
                 onClick = onAgregarClick,
                 modifier = Modifier.size(50.dp)
@@ -54,7 +52,6 @@ fun BarraInferior(
                 )
             }
 
-            // Botón Búsqueda - Activa la barra de búsqueda en HomeScreen
             IconButton(
                 onClick = onSearchClick,
                 modifier = Modifier.size(50.dp)
