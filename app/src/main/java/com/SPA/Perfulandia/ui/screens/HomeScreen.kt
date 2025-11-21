@@ -2,15 +2,19 @@ package com.SPA.Perfulandia.ui.screens
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -30,6 +34,12 @@ fun HomeScreen(
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val productos by viewModel.productos.collectAsState()
+    var searchText by remember { mutableStateOf("") }
+
+    // Filtrar productos según búsqueda
+    val productosFiltrados = productos.filter { producto ->
+        producto.nombre.contains(searchText, ignoreCase = true)
+    }
 
     Scaffold(
         topBar = {
@@ -51,10 +61,29 @@ fun HomeScreen(
             Logo(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(if (isLandscape) 120.dp else 180.dp)
+                    .height(if (isLandscape) 100.dp else 140.dp)
             )
 
-            // Lista de productos
+            // Buscador
+            TextField(
+                value = searchText,
+                onValueChange = { searchText = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                placeholder = { Text("🔍 Buscar perfumes...") },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
             if (productos.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -66,12 +95,26 @@ fun HomeScreen(
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
                 }
-            } else {
-                LazyColumn(
+            } else if (productosFiltrados.isEmpty()) {
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 8.dp)
+                    contentAlignment = Alignment.Center
                 ) {
-                    items(productos) { producto ->
+                    Text(
+                        text = "No se encontraron perfumes con \"$searchText\"",
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(productosFiltrados) { producto ->
                         ProductoCard(
                             producto = producto,
                             onDelete = {
@@ -90,4 +133,5 @@ fun HomeScreen(
         }
     }
 }
+
 

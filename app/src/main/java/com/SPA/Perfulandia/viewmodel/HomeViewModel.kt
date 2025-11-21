@@ -18,13 +18,14 @@ class HomeViewModel(
         emptyList()
     )
 
-    fun agregarProducto(nombre: String, precio: Int, descripcion: String) {
+    fun agregarProducto(nombre: String, precio: Int, descripcion: String, imagen: String? = null) {
         viewModelScope.launch {
             repository.insertar(
                 Producto(
                     nombre = nombre,
                     precio = precio,
-                    descripcion = descripcion
+                    descripcion = descripcion,
+                    imagen = imagen
                 )
             )
         }

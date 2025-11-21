@@ -5,10 +5,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.SPA.Perfulandia.model.Producto
 import com.SPA.Perfulandia.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
@@ -64,6 +67,26 @@ fun DetailScreen(
                     CircularProgressIndicator()
                 }
             } else if (producto != null) {
+                // Mostrar la imagen del producto si existe
+                producto!!.imagen?.let { imagenUri ->
+                    if (imagenUri.isNotEmpty() && imagenUri != "null") {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        ) {
+                            AsyncImage(
+                                model = imagenUri,
+                                contentDescription = "Imagen de ${producto!!.nombre}",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(250.dp),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
