@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.SPA.Perfulandia.ui.components.ImageCapture
 import com.SPA.Perfulandia.ui.components.BarraInferior
 import com.SPA.Perfulandia.viewmodel.HomeViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +33,11 @@ fun AddProductScreen(
 
     // Flag para mostrar/ocultar mensajes de error
     var showError by rememberSaveable { mutableStateOf(false) }
+
+    // Estado para mostrar SnackBar con mensaje de error específico
+    var mensajeError by rememberSaveable { mutableStateOf("") }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -50,7 +56,8 @@ fun AddProductScreen(
                 onHomeClick = onBack,
                 onSearchClick = { /* La búsqueda está en home */ }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -112,28 +119,52 @@ fun AddProductScreen(
                 Button(
                     onClick = {
                         // Convertir el texto del precio a entero
-                        // toIntOrNull() retorna null si la conversión falla
                         val precio = precioText.toIntOrNull()
 
-                        // VALIDACIÓN: Verificar que el precio sea válido y nombre no esté vacío
-                        // - precio != null: Asegura que sea un número entero válido
-                        // - nombre.isNotBlank(): Asegura que el nombre tenga al menos 1 carácter
-                        // - nombre.length >= 3: El nombre debe tener mínimo 3 caracteres
-                        // - precio >= 1000: Precio mínimo 1000 (validación de negocio)
-                        // - precio <= 999999: Precio máximo 999999 (rango realista)
-                        if (nombre.isBlank() || nombre.length < 3 || precio == null || precio < 1000 || precio > 999999) {
-                            // Si falla cualquier validación, mostrar error
-                            showError = true
-                        } else {
-                            // Validación exitosa: insertar producto con todos los datos
-                            homeViewModel.agregarProducto(
-                                nombre = nombre,
-                                precio = precio,
-                                descripcion = descripcion,
-                                imagen = imagenUri  // Puede ser null, es opcional
-                            )
-                            // Volver a la pantalla anterior después de guardar
-                            onBack()
+                        // VALIDACIÓN CON MENSAJES ESPECÍFICOS
+                        when {
+                            nombre.isBlank() -> {
+                                mensajeError = "⚠️ El nombre es obligatorio"
+                                showError = true
+                            }
+                            nombre.length < 3 -> {
+                                mensajeError = "⚠️ El nombre debe tener mínimo 3 caracteres (${nombre.length}/3)"
+                                showError = true
+                            }
+                            precioText.isBlank() -> {
+                                mensajeError = "⚠️ El precio es obligatorio"
+                                showError = true
+                            }
+                            precio == null -> {
+                                mensajeError = "⚠️ El precio debe ser un número válido"
+                                showError = true
+                            }
+                            precio < 1000 -> {
+                                mensajeError = "⚠️ Precio mínimo \$1.000 (ingresó: \$${precio})"
+                                showError = true
+                            }
+                            precio > 999999 -> {
+                                mensajeError = "⚠️ Precio máximo \$999.999 (ingresó: \$${precio})"
+                                showError = true
+                            }
+                            else -> {
+                                homeViewModel.agregarProducto(
+                                    nombre = nombre,
+                                    precio = precio,
+                                    descripcion = descripcion,
+                                    imagen = imagenUri
+                                )
+                                onBack()
+                            }
+                        }
+
+                        if (showError && mensajeError.isNotEmpty()) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = mensajeError,
+                                    duration = SnackbarDuration.Long
+                                )
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

@@ -30,9 +30,12 @@ fun EditProductScreen(
     var precioText by rememberSaveable { mutableStateOf("") }
     var descripcion by rememberSaveable { mutableStateOf("") }
     var imagenUri by rememberSaveable { mutableStateOf<String?>(null) }
+
     var showError by rememberSaveable { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(true) }
+    var mensajeError by rememberSaveable { mutableStateOf("") }
+    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(true) }
 
     // Cargar el producto cuando se abre la pantalla
     LaunchedEffect(productoId) {
@@ -71,7 +74,8 @@ fun EditProductScreen(
                 onHomeClick = { navController.popBackStack() },
                 onSearchClick = { /* La búsqueda está en home */ }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { padding ->
         if (isLoading) {
             Box(
@@ -95,15 +99,33 @@ fun EditProductScreen(
                     modifier = Modifier
                         .padding(16.dp)
                 ) {
+                    // CAMPO: NOMBRE DEL PRODUCTO
                     OutlinedTextField(
                         value = nombre,
                         onValueChange = { nombre = it },
-                        label = { Text("Nombre") },
-                        modifier = Modifier.fillMaxWidth()
+                        label = { Text("Nombre del Producto") },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = nombre.isNotBlank() && nombre.length < 3
+                    )
+                    // Mensaje de validación en tiempo real
+                    Text(
+                        text = when {
+                            nombre.isEmpty() -> "✓ Campo vacío (mínimo 3 caracteres)"
+                            nombre.length < 3 -> "❌ Mínimo 3 caracteres (${nombre.length}/3)"
+                            else -> "✓ Válido (${nombre.length} caracteres)"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = when {
+                            nombre.isEmpty() -> MaterialTheme.colorScheme.onSurface
+                            nombre.length < 3 -> MaterialTheme.colorScheme.error
+                            else -> MaterialTheme.colorScheme.primary
+                        },
+                        modifier = Modifier.padding(start = 12.dp, top = 4.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
+                    // CAMPO: PRECIO
                     OutlinedTextField(
                         value = precioText,
                         onValueChange = {
@@ -115,17 +137,43 @@ fun EditProductScreen(
                         modifier = Modifier.fillMaxWidth(),
                         isError = showError
                     )
+                    // Mensaje de validación en tiempo real
+                    Text(
+                        text = when {
+                            precioText.isEmpty() -> "✓ Campo vacío (rango: 1000-999999)"
+                            precioText.toIntOrNull() == null -> "❌ Solo números permitidos"
+                            precioText.toInt() < 1000 -> "❌ Mínimo 1000 (ingresó ${precioText})"
+                            precioText.toInt() > 999999 -> "❌ Máximo 999999 (ingresó ${precioText})"
+                            else -> "✓ Válido (\$${precioText})"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = when {
+                            precioText.isEmpty() -> MaterialTheme.colorScheme.onSurface
+                            precioText.toIntOrNull() == null -> MaterialTheme.colorScheme.error
+                            precioText.toInt() < 1000 || precioText.toInt() > 999999 -> MaterialTheme.colorScheme.error
+                            else -> MaterialTheme.colorScheme.primary
+                        },
+                        modifier = Modifier.padding(start = 12.dp, top = 4.dp)
+                    )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
+                    // CAMPO: DESCRIPCIÓN (Opcional)
                     OutlinedTextField(
                         value = descripcion,
                         onValueChange = { descripcion = it },
-                        label = { Text("Descripción") },
+                        label = { Text("Descripción (Opcional)") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = 80.dp),
                         maxLines = 4
+                    )
+                    // Mensaje informativo
+                    Text(
+                        text = "Campo opcional - Máximo 500 caracteres (${descripcion.length}/500)",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(start = 12.dp, top = 4.dp)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -144,24 +192,50 @@ fun EditProductScreen(
                         onClick = {
                             val precio = precioText.toIntOrNull()
 
-                            // VALIDACIÓN MEJORADA (igual que AddProductScreen):
-                            // - nombre.isNotBlank(): No puede estar vacío
-                            // - nombre.length >= 3: Mínimo 3 caracteres
-                            // - precio != null: Debe ser un número válido
-                            // - precio >= 1000: Precio mínimo 1000
-                            // - precio <= 999999: Precio máximo 999999
-                            if (nombre.isBlank() || nombre.length < 3 || precio == null || precio < 1000 || precio > 999999) {
-                                showError = true
-                            } else {
-                                // Actualizar el producto existente
-                                val productoActualizado = productoOriginal!!.copy(
-                                    nombre = nombre,
-                                    precio = precio,
-                                    descripcion = descripcion,
-                                    imagen = imagenUri
-                                )
-                                homeViewModel.actualizarProducto(productoActualizado)
-                                navController.popBackStack()
+                            when {
+                                nombre.isBlank() -> {
+                                    mensajeError = "⚠️ El nombre es obligatorio"
+                                    showError = true
+                                }
+                                nombre.length < 3 -> {
+                                    mensajeError = "⚠️ El nombre debe tener mínimo 3 caracteres (${nombre.length}/3)"
+                                    showError = true
+                                }
+                                precioText.isBlank() -> {
+                                    mensajeError = "⚠️ El precio es obligatorio"
+                                    showError = true
+                                }
+                                precio == null -> {
+                                    mensajeError = "⚠️ El precio debe ser un número válido"
+                                    showError = true
+                                }
+                                precio < 1000 -> {
+                                    mensajeError = "⚠️ Precio mínimo \$1.000 (ingresó: \$${precio})"
+                                    showError = true
+                                }
+                                precio > 999999 -> {
+                                    mensajeError = "⚠️ Precio máximo \$999.999 (ingresó: \$${precio})"
+                                    showError = true
+                                }
+                                else -> {
+                                    val productoActualizado = productoOriginal!!.copy(
+                                        nombre = nombre,
+                                        precio = precio,
+                                        descripcion = descripcion,
+                                        imagen = imagenUri
+                                    )
+                                    homeViewModel.actualizarProducto(productoActualizado)
+                                    navController.popBackStack()
+                                }
+                            }
+
+                            if (showError && mensajeError.isNotEmpty()) {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = mensajeError,
+                                        duration = SnackbarDuration.Long
+                                    )
+                                }
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
