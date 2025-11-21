@@ -143,7 +143,14 @@ fun EditProductScreen(
                     Button(
                         onClick = {
                             val precio = precioText.toIntOrNull()
-                            if (precio == null || nombre.isBlank()) {
+
+                            // VALIDACIÓN MEJORADA (igual que AddProductScreen):
+                            // - nombre.isNotBlank(): No puede estar vacío
+                            // - nombre.length >= 3: Mínimo 3 caracteres
+                            // - precio != null: Debe ser un número válido
+                            // - precio >= 1000: Precio mínimo 1000
+                            // - precio <= 999999: Precio máximo 999999
+                            if (nombre.isBlank() || nombre.length < 3 || precio == null || precio < 1000 || precio > 999999) {
                                 showError = true
                             } else {
                                 // Actualizar el producto existente

@@ -116,8 +116,13 @@ fun AddProductScreen(
                         val precio = precioText.toIntOrNull()
 
                         // VALIDACIÓN: Verificar que el precio sea válido y nombre no esté vacío
-                        if (precio == null || nombre.isBlank()) {
-                            // Si falla la validación, mostrar error
+                        // - precio != null: Asegura que sea un número entero válido
+                        // - nombre.isNotBlank(): Asegura que el nombre tenga al menos 1 carácter
+                        // - nombre.length >= 3: El nombre debe tener mínimo 3 caracteres
+                        // - precio >= 1000: Precio mínimo 1000 (validación de negocio)
+                        // - precio <= 999999: Precio máximo 999999 (rango realista)
+                        if (nombre.isBlank() || nombre.length < 3 || precio == null || precio < 1000 || precio > 999999) {
+                            // Si falla cualquier validación, mostrar error
                             showError = true
                         } else {
                             // Validación exitosa: insertar producto con todos los datos
