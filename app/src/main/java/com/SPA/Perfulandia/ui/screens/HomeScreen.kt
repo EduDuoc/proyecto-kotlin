@@ -9,6 +9,8 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -32,6 +34,9 @@ fun HomeScreen(
     // Estado para el texto de búsqueda
     var searchText by remember { mutableStateOf("") }
 
+    // FocusRequester para activar el TextField de búsqueda desde el botón de la barra inferior
+    val searchFocusRequester = remember { FocusRequester() }
+
     // FILTRADO REACTIVO: Filtra los productos en tiempo real según el texto de búsqueda
     // Se ejecuta cada vez que cambian "productos" o "searchText"
     val productosFiltrados = productos.filter { producto ->
@@ -41,13 +46,16 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            BarraSuperior("Vista Administrador - Perfulandia SPA")
+            BarraSuperior("Vista Administrador")
         },
         bottomBar = {
             BarraInferior(
                 onAgregarClick = onNavigateAdd,
                 onHomeClick = { /* Ya estamos en home, no hace nada */ },
-                onSearchClick = { /* La búsqueda ya está en la pantalla */ }
+                onSearchClick = {
+                    // Cuando se hace clic en el botón de búsqueda, hace foco en el TextField
+                    searchFocusRequester.requestFocus()
+                }
             )
         }
     ) { innerPadding ->
@@ -70,7 +78,8 @@ fun HomeScreen(
                 onValueChange = { searchText = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .focusRequester(searchFocusRequester),
                 placeholder = { Text("Buscar perfumes...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "icono buscar") },
                 shape = RoundedCornerShape(12.dp),

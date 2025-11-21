@@ -164,9 +164,13 @@ fun EditProductScreen(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    OutlinedButton(
+                    Button(
                         onClick = { navController.popBackStack() },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
+                        )
                     ) {
                         Text("Cancelar")
                     }

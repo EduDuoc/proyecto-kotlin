@@ -14,12 +14,11 @@ fun BarraSuperior(text: String, modifier: Modifier = Modifier) {
     // componente barra superior
     TopAppBar(
         title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.Home, // Ícono de Material Design
-                    contentDescription = "Icono Home (casa)",
-                    modifier = Modifier.padding(end = 8.dp).size(24.dp)
-                )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Text(text)
             }
         }

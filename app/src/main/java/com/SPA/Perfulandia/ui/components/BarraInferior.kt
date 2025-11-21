@@ -22,7 +22,7 @@ fun BarraInferior(
         contentColor = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(70.dp)
     ) {
         Row(
             modifier = Modifier
@@ -33,36 +33,36 @@ fun BarraInferior(
             // Botón Home - Volver a HomeScreen
             IconButton(
                 onClick = onHomeClick,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(50.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Home,
                     contentDescription = "Home",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(28.dp)
                 )
             }
 
             // Botón Agregar Producto
             IconButton(
                 onClick = onAgregarClick,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(50.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Agregar producto",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(35.dp)
                 )
             }
 
-            // Botón Búsqueda
+            // Botón Búsqueda - Activa la barra de búsqueda en HomeScreen
             IconButton(
                 onClick = onSearchClick,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(50.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Search,
-                    contentDescription = "Buscar",
-                    modifier = Modifier.size(24.dp)
+                    contentDescription = "Buscar perfumes",
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }
