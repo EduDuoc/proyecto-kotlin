@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.SPA.Perfulandia.ui.components.ImageCapture
+import com.SPA.Perfulandia.ui.components.BarraInferior
 import com.SPA.Perfulandia.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +42,13 @@ fun AddProductScreen(
                         Icon(Icons.Default.ArrowBack, "Volver")
                     }
                 }
+            )
+        },
+        bottomBar = {
+            BarraInferior(
+                onAgregarClick = { /* Ya estamos agregando */ },
+                onHomeClick = onBack,
+                onSearchClick = { /* La búsqueda está en home */ }
             )
         }
     ) { padding ->

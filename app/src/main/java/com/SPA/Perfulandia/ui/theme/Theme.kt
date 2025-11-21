@@ -9,35 +9,43 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalContext
 
+// ✨ Paleta árabe moderna - Tema oscuro (Sofisticado y elegante)
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = RosyGold,              // Dorado rosado (#C28872)
+    onPrimary = BlackMatte,          // Texto negro mate
+    secondary = CharcoalGrey,        // Gris carbón (#2B2B2B)
+    onSecondary = PearlWhite,        // Texto blanco perla
+    tertiary = RosyGoldDark,         // Dorado rosado oscuro
+    onTertiary = PearlWhite,         // Texto blanco perla
+    background = BlackMatte,         // Fondo negro mate (#1A1A1A)
+    surface = CharcoalGrey,          // Superficie gris carbón
+    onBackground = PearlWhite,       // Texto blanco perla
+    onSurface = PearlWhite           // Texto blanco perla
 )
 
+// ✨ Paleta árabe moderna - Tema claro (Sofisticado y elegante)
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = RosyGold,              // Dorado rosado (#C28872)
+    onPrimary = PearlWhite,          // Texto blanco perla
+    secondary = CharcoalGrey,        // Gris carbón (#2B2B2B)
+    onSecondary = PearlWhite,        // Texto blanco perla
+    tertiary = RosyGoldDark,         // Dorado rosado oscuro
+    onTertiary = PearlWhite,         // Texto blanco perla
+    background = PearlWhite,         // Fondo blanco perla (#F2F2F2)
+    surface = Color(0xFFFFFFFF),     // Superficie blanco puro
+    onBackground = CharcoalGrey,     // Texto gris carbón
+    onSurface = CharcoalGrey         // Texto gris carbón
 )
 
 @Composable
 fun PerfulandiaSPATheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // Dynamic color desactivado para que se use la paleta árabe de lujo
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

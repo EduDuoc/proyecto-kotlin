@@ -44,7 +44,11 @@ fun HomeScreen(
             BarraSuperior("Vista Administrador - Perfulandia SPA")
         },
         bottomBar = {
-            BarraInferior(onAgregarClick = onNavigateAdd)
+            BarraInferior(
+                onAgregarClick = onNavigateAdd,
+                onHomeClick = { /* Ya estamos en home, no hace nada */ },
+                onSearchClick = { /* La búsqueda ya está en la pantalla */ }
+            )
         }
     ) { innerPadding ->
 

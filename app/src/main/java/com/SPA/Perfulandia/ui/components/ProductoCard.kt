@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -78,12 +79,12 @@ fun ProductoCard(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Botón de información
+                // Botón de información - Azul media noche oscuro
                 IconButton(
                     onClick = onInfo,
                     modifier = Modifier.size(32.dp),
                     colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.primary
+                        contentColor = Color(0xFF0D1B3D)  // Azul media noche muy oscuro
                     )
                 ) {
                     Icon(

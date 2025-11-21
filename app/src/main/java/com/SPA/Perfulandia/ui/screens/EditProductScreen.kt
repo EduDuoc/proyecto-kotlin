@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.SPA.Perfulandia.model.Producto
+import com.SPA.Perfulandia.ui.components.BarraInferior
 import com.SPA.Perfulandia.ui.components.ImageCapture
 import com.SPA.Perfulandia.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
@@ -62,6 +63,13 @@ fun EditProductScreen(
                         )
                     }
                 }
+            )
+        },
+        bottomBar = {
+            BarraInferior(
+                onAgregarClick = { navController.navigate("add_product") },
+                onHomeClick = { navController.popBackStack() },
+                onSearchClick = { /* La búsqueda está en home */ }
             )
         }
     ) { padding ->
