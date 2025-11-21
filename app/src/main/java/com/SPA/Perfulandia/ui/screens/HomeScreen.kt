@@ -26,11 +26,16 @@ fun HomeScreen(
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
+    // Observar la lista de productos desde el ViewModel
     val productos by viewModel.productos.collectAsState()
+
+    // Estado para el texto de búsqueda
     var searchText by remember { mutableStateOf("") }
 
-    // Filtrar productos según búsqueda
+    // FILTRADO REACTIVO: Filtra los productos en tiempo real según el texto de búsqueda
+    // Se ejecuta cada vez que cambian "productos" o "searchText"
     val productosFiltrados = productos.filter { producto ->
+        // Búsqueda case-insensitive (ignora mayúsculas/minúsculas)
         producto.nombre.contains(searchText, ignoreCase = true)
     }
 

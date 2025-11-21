@@ -12,12 +12,17 @@ class HomeViewModel(
     private val repository: ProductoRepository
 ) : ViewModel() {
 
+    // StateFlow que emite la lista de productos desde el repositorio
+    // Se convierte a State para que la UI se recomponga automáticamente cuando cambia
+    // WhileSubscribed(5000) mantiene la suscripción activa por 5 segundos tras el último observador
     val productos = repository.productos.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         emptyList()
     )
 
+    // Inserta un nuevo producto en la base de datos
+    // Usa viewModelScope para ejecutar la corrutina de forma asincrónica sin bloquear la UI
     fun agregarProducto(nombre: String, precio: Int, descripcion: String, imagen: String? = null) {
         viewModelScope.launch {
             repository.insertar(
@@ -31,18 +36,21 @@ class HomeViewModel(
         }
     }
 
+    // Elimina un producto de la base de datos
     fun eliminarProducto(producto: Producto) {
         viewModelScope.launch {
             repository.eliminar(producto)
         }
     }
 
+    // Actualiza un producto existente en la base de datos
     fun actualizarProducto(producto: Producto) {
         viewModelScope.launch {
             repository.actualizar(producto)
         }
     }
 
+    // Obtiene un producto por su ID de forma asincrónica (suspend function)
     suspend fun obtenerProductoPorId(id: Int): Producto? {
         return repository.obtenerPorId(id)
     }

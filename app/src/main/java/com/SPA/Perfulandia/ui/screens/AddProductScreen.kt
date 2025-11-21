@@ -22,10 +22,14 @@ fun AddProductScreen(
     homeViewModel: HomeViewModel,
     onBack: () -> Unit
 ) {
+    // Variables de estado para los campos del formulario
+    // rememberSaveable preserva los valores si la pantalla se recompone
     var nombre by rememberSaveable { mutableStateOf("") }
     var precioText by rememberSaveable { mutableStateOf("") }
     var descripcion by rememberSaveable { mutableStateOf("") }
     var imagenUri by rememberSaveable { mutableStateOf<String?>(null) }
+
+    // Flag para mostrar/ocultar mensajes de error
     var showError by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
@@ -99,16 +103,23 @@ fun AddProductScreen(
 
                 Button(
                     onClick = {
+                        // Convertir el texto del precio a entero
+                        // toIntOrNull() retorna null si la conversión falla
                         val precio = precioText.toIntOrNull()
+
+                        // VALIDACIÓN: Verificar que el precio sea válido y nombre no esté vacío
                         if (precio == null || nombre.isBlank()) {
+                            // Si falla la validación, mostrar error
                             showError = true
                         } else {
+                            // Validación exitosa: insertar producto con todos los datos
                             homeViewModel.agregarProducto(
                                 nombre = nombre,
                                 precio = precio,
                                 descripcion = descripcion,
-                                imagen = imagenUri
+                                imagen = imagenUri  // Puede ser null, es opcional
                             )
+                            // Volver a la pantalla anterior después de guardar
                             onBack()
                         }
                     },
