@@ -2,25 +2,18 @@ package com.SPA.Perfulandia.ui.screens
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.SPA.Perfulandia.ui.components.BarraSuperior
-import com.SPA.Perfulandia.ui.components.Logo
-import com.SPA.Perfulandia.ui.components.ProductoCard
+import com.SPA.Perfulandia.ui.components.*
 import com.SPA.Perfulandia.viewmodel.HomeViewModel
 
 @Composable
@@ -43,12 +36,10 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            BarraSuperior("Perfulandia SPA")
+            BarraSuperior("Vista Administrador - Perfulandia SPA")
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = onNavigateAdd) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar producto")
-            }
+        bottomBar = {
+            BarraInferior(onAgregarClick = onNavigateAdd)
         }
     ) { innerPadding ->
 
@@ -71,8 +62,8 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp),
-                placeholder = { Text("🔍 Buscar perfumes...") },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                placeholder = { Text("Buscar perfumes...") },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "icono buscar") },
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -133,5 +124,3 @@ fun HomeScreen(
         }
     }
 }
-
-

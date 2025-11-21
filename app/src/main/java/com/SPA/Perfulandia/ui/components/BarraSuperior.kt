@@ -18,7 +18,7 @@ fun BarraSuperior(text: String, modifier: Modifier = Modifier) {
                 Icon(
                     imageVector = Icons.Default.Home, // Ícono de Material Design
                     contentDescription = "Icono Home (casa)",
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = 8.dp).size(24.dp)
                 )
                 Text(text)
             }
