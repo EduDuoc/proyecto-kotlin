@@ -136,7 +136,7 @@ fun ImageCapture(
                     contentColor = MaterialTheme.colorScheme.onError
                 )
             ) {
-                Text("Limpiar")
+                Text("Limpiar imagen")
             }
         }
     }

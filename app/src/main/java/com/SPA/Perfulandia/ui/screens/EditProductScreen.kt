@@ -101,7 +101,7 @@ fun EditProductScreen(
                     OutlinedTextField(
                         value = nombre,
                         onValueChange = { nombre = it },
-                        label = { Text("Nombre del Producto") },
+                        label = { Text("Nombre del Perfume") },
                         modifier = Modifier.fillMaxWidth(),
                         isError = nombre.isNotBlank() && nombre.length < 3
                     )
@@ -135,17 +135,17 @@ fun EditProductScreen(
                     )
                     Text(
                         text = when {
-                            precioText.isEmpty() -> "✓ Campo vacío (rango: 1000-999999)"
-                            precioText.toIntOrNull() == null -> "❌ Solo números permitidos"
-                            precioText.toInt() < 1000 -> "❌ Mínimo 1000 (ingresó ${precioText})"
-                            precioText.toInt() > 999999 -> "❌ Máximo 999999 (ingresó ${precioText})"
+                            precioText.isEmpty() -> "✓ Campo vacío (rango: 1000-999999999)"
+                            precioText.toLongOrNull() == null -> "Solo números permitidos"
+                            precioText.toLong() < 1000 -> "Mínimo 1000 (ingresó ${precioText})"
+                            precioText.toLong() > 999999999 -> "Máximo 999999999 (ingresó ${precioText})"
                             else -> "✓ Válido (\$${precioText})"
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = when {
                             precioText.isEmpty() -> MaterialTheme.colorScheme.onSurface
-                            precioText.toIntOrNull() == null -> MaterialTheme.colorScheme.error
-                            precioText.toInt() < 1000 || precioText.toInt() > 999999 -> MaterialTheme.colorScheme.error
+                            precioText.toLongOrNull() == null -> MaterialTheme.colorScheme.error
+                            precioText.toLong() < 1000 || precioText.toLong() > 999999999 -> MaterialTheme.colorScheme.error
                             else -> MaterialTheme.colorScheme.primary
                         },
                         modifier = Modifier.padding(start = 12.dp, top = 4.dp)
@@ -205,8 +205,8 @@ fun EditProductScreen(
                                     mensajeError = "⚠️ Precio mínimo \$1.000 (ingresó: \$${precio})"
                                     showError = true
                                 }
-                                precio > 999999 -> {
-                                    mensajeError = "⚠️ Precio máximo \$999.999 (ingresó: \$${precio})"
+                                precio > 999999999 -> {
+                                    mensajeError = "⚠️ Precio máximo \$999.999.999 (ingresó: \$${precio})"
                                     showError = true
                                 }
                                 else -> {
@@ -257,7 +257,7 @@ fun EditProductScreen(
                 contentAlignment = androidx.compose.ui.Alignment.Center
             ) {
                 Text(
-                    text = "Producto no encontrado",
+                    text = "Perfume no encontrado",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.error
                 )
