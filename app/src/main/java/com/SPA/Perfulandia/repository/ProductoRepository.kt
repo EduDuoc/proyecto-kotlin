@@ -19,3 +19,4 @@ class ProductoRepository(
         return dao.getById(id)
     }
 }
+//Intermediario entre viewmodel y la base de datos(traductor)

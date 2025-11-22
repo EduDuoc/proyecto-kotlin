@@ -35,7 +35,7 @@ fun AddProductScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    Scaffold(
+    Scaffold(//contendedor principal
         topBar = {
             TopAppBar(
                 title = { Text("Agregar Perfume") },
@@ -55,6 +55,7 @@ fun AddProductScreen(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { padding ->
+        // Column que permite scroll si hay mucho contenido
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -62,11 +63,12 @@ fun AddProductScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top
         ) {
-
+            // Column interno con el formulario
             Column(
                 modifier = Modifier
                     .padding(16.dp)
             ) {
+                // Campo: Nombre del producto
                 OutlinedTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
@@ -76,6 +78,7 @@ fun AddProductScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Campo: Precio (solo números)
                 OutlinedTextField(
                     value = precioText,
                     onValueChange = {
@@ -90,6 +93,7 @@ fun AddProductScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Campo: Descripción del producto
                 OutlinedTextField(
                     value = descripcion,
                     onValueChange = { descripcion = it },
@@ -102,6 +106,7 @@ fun AddProductScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Componente para capturar o seleccionar imagen
                 ImageCapture(
                     onImageCaptured = { uri ->
                         imagenUri = uri

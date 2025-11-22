@@ -3,8 +3,9 @@ package com.SPA.Perfulandia.data.database
 import androidx.room.*
 import com.SPA.Perfulandia.model.Producto
 import kotlinx.coroutines.flow.Flow
-
-@Dao
+//este archivo define las operaciones de la base de datos para la entidad Producto
+//
+@Dao//marca el archivo como operaciones de la base de datos
 interface ProductoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import java.io.File
 import java.io.FileOutputStream
 
+
 @Composable
 fun ImageCapture(
     onImageCaptured: (String) -> Unit,
@@ -29,6 +30,7 @@ fun ImageCapture(
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var capturedPhotoBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
+    // Abre cámara y captura foto
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
@@ -44,6 +46,7 @@ fun ImageCapture(
         }
     }
 
+    // Abre galería y selecciona imagen
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
@@ -70,6 +73,7 @@ fun ImageCapture(
 
         Spacer(modifier = Modifier.height(12.dp))
 
+        // Muestra foto capturada de cámara
         if (capturedPhotoBitmap != null) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Image(
@@ -83,7 +87,7 @@ fun ImageCapture(
             }
             Spacer(modifier = Modifier.height(8.dp))
         }
-        // Previa de imagen de galería
+        // Muestra imagen seleccionada de galería
         else if (selectedImageUri != null) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
@@ -98,6 +102,7 @@ fun ImageCapture(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
+        // Botones cámara y galería
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -123,6 +128,7 @@ fun ImageCapture(
             }
         }
 
+        // Botón limpiar imagen
         if (capturedPhotoBitmap != null || selectedImageUri != null) {
             Spacer(modifier = Modifier.height(8.dp))
             Button(
@@ -142,6 +148,8 @@ fun ImageCapture(
     }
 }
 
+
+// Guarda bitmap como archivo JPG en almacenamiento interno
 private fun saveBitmapToFile(context: Context, bitmap: Bitmap): String {
     return try {
         val dir = File(context.filesDir, "product_images")
@@ -152,6 +160,7 @@ private fun saveBitmapToFile(context: Context, bitmap: Bitmap): String {
         FileOutputStream(file).use {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 85, it)
         }
+
         file.toURI().toString()
     } catch (e: Exception) {
         Log.e("ImageCapture", "Error guardar:", e)

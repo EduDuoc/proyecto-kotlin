@@ -21,7 +21,7 @@ fun ProductoCard(
     onInfo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var showDeleteDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }//
 
     Card(
         modifier = modifier.fillMaxWidth(),

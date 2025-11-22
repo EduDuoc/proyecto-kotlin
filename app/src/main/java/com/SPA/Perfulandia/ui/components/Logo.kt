@@ -12,8 +12,8 @@ fun Logo(modifier: Modifier = Modifier) {
 
     Image(
         painter = painterResource(id = R.drawable.image),
-        contentDescription = "Imagen de ejemplo",
-        modifier = modifier,
-        contentScale = ContentScale.Inside // Crop
+        contentDescription = "Imagen de ejemplo",// Descripción para accesibilidad
+        modifier = modifier,// Aplica el modificador pasado como parámetro
+        contentScale = ContentScale.Inside // Ajusta la imagen para que quepa dentro del contenedor sin recortarla
     )
 }
