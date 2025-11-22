@@ -32,7 +32,7 @@ fun ProductoCard(
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-            producto.imagen?.let { imagenUri ->
+                producto.imagen?.let { imagenUri ->
                 if (imagenUri.isNotEmpty() && imagenUri != "null") {
                     Card(
                         modifier = Modifier.fillMaxWidth()

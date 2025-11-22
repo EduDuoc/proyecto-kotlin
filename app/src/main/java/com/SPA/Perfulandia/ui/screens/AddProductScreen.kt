@@ -117,27 +117,27 @@ fun AddProductScreen(
 
                         when {
                             nombre.isBlank() -> {
-                                mensajeError = "⚠El nombre es obligatorio"
+                                mensajeError = "El nombre es obligatorio"
                                 showError = true
                             }
                             nombre.length < 3 -> {
-                                mensajeError = "⚠El nombre debe tener mínimo 3 caracteres (${nombre.length}/3)"
+                                mensajeError = "El nombre debe tener mínimo 3 caracteres (${nombre.length}/3)"
                                 showError = true
                             }
                             precioText.isBlank() -> {
-                                mensajeError = "⚠El precio es obligatorio"
+                                mensajeError = "El precio es obligatorio"
                                 showError = true
                             }
                             precio == null -> {
-                                mensajeError = "⚠El precio debe ser un número válido"
+                                mensajeError = "El precio debe ser un número válido"
                                 showError = true
                             }
                             precio < 1000 -> {
-                                mensajeError = "⚠Precio mínimo \$1.000 (ingresó: \$${precio})"
+                                mensajeError = "Precio mínimo \$1.000 (ingresó: \$${precio})"
                                 showError = true
                             }
                             precio > 999999999 -> {
-                                mensajeError = "⚠Precio máximo \$999.999.999 (ingresó: \$${precio})"
+                                mensajeError = "Precio máximo \$999.999.999 (ingresó: \$${precio})"
                                 showError = true
                             }
                             else -> {
